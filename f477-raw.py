@@ -14,7 +14,7 @@ techcodes = {
     "60": "satellite",
     "70": "fixed-wireless",
     "90": "power-line",
-    "0": "other"
+    "0": "other",
 }
 
 providers = {}
@@ -48,12 +48,26 @@ with open("fbd_us_with_satellite_jun2020_v1_fixed.csv", encoding="utf-8") as csv
 
             bc = row["BlockCode"]
             if bc not in blocks:
-                blocks[bc] = {"broadband:up": -1, "broadband:down": -1, "census_block": bc}
-            if down > blocks[bc]["broadband:down"]:
-                blocks[bc]["broadband:fastest-provider"] = p
+                blocks[bc] = {
+                    "broadband:up": -1,
+                    "broadband:down": -1,
+                    "census_block": bc,
+                    "broadband:total": -1,
+                    "broadband:fiber": False,
+                    "broadband:ftth": False
+                }
+            if (up + down) > blocks[bc]["broadband:total"]:
+                blocks[bc]["broadband:fastest-dba"] = p
                 blocks[bc]["broadband:down"] = down
                 blocks[bc]["broadband:fastest-tech"] = techcodes[t]
                 blocks[bc]["broadband:up"] = up
+                blocks[bc]["broadband:total"] = up + down
+            if bc == "530319503005005":
+                print(row)
+            if t == "50":
+                blocks[bc]["broadband:fiber"] = True
+                blocks[bc]["broadband:ftth"] = blocks[bc]["broadband:ftth"] or row["Consumer"] == "1"
+                blocks[bc]["broadband:fiber-provider"] = row["ProviderName"].lower().replace(" ", "-").replace(",", "")
 
             # h = row["HocoNum"]
             # if h not in hocos:
@@ -62,7 +76,7 @@ with open("fbd_us_with_satellite_jun2020_v1_fixed.csv", encoding="utf-8") as csv
             if i < 10:
                 print(row)
             elif i < 1000000:
-                #print(row)
+                # print(row)
                 pass
             elif i % 1000000 == 0:
                 print(i)
@@ -84,7 +98,17 @@ print(i, types)
 # print(blocks)
 
 with open("fastest-by-block.csv", "w") as csvfile:
-    fieldnames = ["census_block", "broadband:fastest-provider", "broadband:fastest-tech", "broadband:up", "broadband:down"]
+    fieldnames = [
+        "census_block",
+        "broadband:fastest-dba",
+        "broadband:fastest-tech",
+        "broadband:up",
+        "broadband:down",
+        "broadband:fiber",
+        "broadband:total",
+        "broadband:ftth",
+        "broadband:fiber-provider"
+    ]
     writer = csv.DictWriter(csvfile, fieldnames)
     writer.writeheader()
     for bc in blocks:
