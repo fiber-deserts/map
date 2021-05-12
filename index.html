@@ -26,7 +26,7 @@ fetch("/tiles/metadata.json")
 	.then(response => response.json())
 	.then(data => {
 		var styleURL = 'https://fiber-deserts.net/static/style.json';
-		var bounds = data['bounds'].split(',');
+		var bounds = data['bounds'];
 		map = new mapboxgl.Map({
 		    container: 'map', // container id
 		    style: styleURL, // stylesheet location
