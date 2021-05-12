@@ -5,7 +5,7 @@
 	"version": "1.0.0",
 	"scheme": "xyz",
 	"tiles": [
-        "https://fiber-deserts.net/tiles/{z}/{x}/{y}.pbf.gz"
+        "https://fiber-deserts.net/tiles/{z}/{x}/{y}.pbf"
 	],
 	"minzoom": 0,
 	"maxzoom": 14,
