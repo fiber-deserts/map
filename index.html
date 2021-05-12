@@ -30,9 +30,9 @@ fetch("/tiles/metadata.json")
 		map = new mapboxgl.Map({
 		    container: 'map', // container id
 		    style: styleURL, // stylesheet location
-		    center: [(Number(bounds[0])+Number(bounds[2]))/2,
-			         (Number(bounds[1])+Number(bounds[3]))/2], // starting position [lng, lat]
-		    zoom: 13 // starting zoom
+		    center: [(bounds[0]+bounds[2])/2,
+			         (bounds[1]+bounds[3])/2], // starting position [lng, lat]
+		    zoom: 11 // starting zoom
 		});
 		map.addControl(new mapboxgl.NavigationControl());
 		map.addControl(new mapboxgl.AttributionControl({ compact: false, customAttribution:
