@@ -22,7 +22,7 @@
 <script>
 var map;
 
-fetch("/metadata")
+fetch("/tiles/metadata.json")
 	.then(response => response.json())
 	.then(data => {
 		var styleURL = 'https://fiber-deserts.net/static/style.json';
