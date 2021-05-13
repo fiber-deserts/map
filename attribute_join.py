@@ -6,6 +6,11 @@ building_attributes = geopandas.read_file("buildings_joined.gpkg", ignore_geomet
 print(building_attributes)
 print(building_attributes.dtypes)
 
+
+way_attributes = geopandas.read_file("ways_joined.gpkg", ignore_geometry=True)
+print(way_attributes)
+print(way_attributes.dtypes)
+
 found = building_attributes[building_attributes["osm_id"] == 139432]
 
 print("found")
@@ -41,6 +46,8 @@ class JoinHandler(osmium.SimpleHandler):
             found = building_attributes[building_attributes["osm_id"] == o.id]
         else:
             found = building_attributes[building_attributes["osm_way_id"] == o.id]
+        if found.empty:
+            found = way_attributes[way_attributes["osm_id"] == o.id]
         if found.empty:
             return o
 
