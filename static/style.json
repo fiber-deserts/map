@@ -166,6 +166,65 @@
       "paint": {"fill-color": "#d8e8c8", "fill-opacity": 0.8}
     },
     {
+      "id": "census-block-empty",
+      "type": "fill",
+      "source": "openmaptiles",
+      "source-layer": "census_blocks",
+      "filter": ["==", "POP10", 0],
+      "paint": {
+        "fill-color": "#bbbbbb",
+        "fill-opacity": ["case",
+           ["boolean", ["feature-state", "hover"], false],
+           0.2,
+           0]
+      }
+    },
+    {
+      "id": "census-block-fiber",
+      "type": "fill",
+      "source": "openmaptiles",
+      "source-layer": "census_blocks",
+      "filter": [
+        "all",
+        [">", "POP10", 0],
+        ["==", "BB-FTTH", 1]
+      ],
+      "paint": {
+        "fill-color": "#00ff00",
+        "fill-opacity": ["case",
+           ["boolean", ["feature-state", "hover"], false],
+           0.2,
+           0]
+      }
+    },
+    {
+      "id": "census-block-no-fiber",
+      "type": "fill",
+      "source": "openmaptiles",
+      "source-layer": "census_blocks",
+      "filter": [
+        "all",
+        [">", "POP10", 0],
+        ["==", "BB-FTTH", 0]
+      ],
+      "paint": {
+        "fill-color": "#ff0000",
+        "fill-opacity": [
+          "step",
+          ["zoom"],
+          ["case",
+           ["boolean", ["feature-state", "hover"], false],
+           0.7,
+           ["step", ["get", "density"], 0.05, 20, 0.3, 27, 0.6]],
+          14,
+          ["case",
+           ["boolean", ["feature-state", "hover"], false],
+           0.2,
+           0]
+        ]
+      }
+    },
+    {
       "id": "waterway_tunnel",
       "type": "line",
       "source": "openmaptiles",
@@ -920,11 +979,35 @@
         "all",
         ["==", "$type", "LineString"],
         ["!=", "brunnel", "tunnel"],
-        ["in", "class", "minor", "service", "track"]
+        ["in", "class", "minor", "service", "track"],
+        ["==", "broadband:fiber", "0"]
       ],
       "layout": {"line-cap": "round", "line-join": "round"},
       "paint": {
         "line-color": "#cfcdca",
+        "line-opacity": {"stops": [[12, 0], [12.5, 1]]},
+        "line-width": {
+          "base": 1.2,
+          "stops": [[12, 0.5], [13, 1], [14, 4], [20, 15]]
+        }
+      }
+    },
+    {
+      "id": "highway-minor-casing-fiber",
+      "type": "line",
+      "metadata": {"mapbox:group": "1444849345966.4436"},
+      "source": "openmaptiles",
+      "source-layer": "transportation",
+      "filter": [
+        "all",
+        ["==", "$type", "LineString"],
+        ["!=", "brunnel", "tunnel"],
+        ["in", "class", "minor", "service", "track"],
+        ["==", "broadband:fiber", "1"]
+      ],
+      "layout": {"line-cap": "round", "line-join": "round"},
+      "paint": {
+        "line-color": "#00ff00",
         "line-opacity": {"stops": [[12, 0], [12.5, 1]]},
         "line-width": {
           "base": 1.2,
@@ -942,7 +1025,8 @@
         "all",
         ["!in", "brunnel", "bridge", "tunnel"],
         ["in", "class", "secondary", "tertiary"],
-        ["!=", "ramp", 1]
+        ["!=", "ramp", 1],
+        ["==", "broadband:fiber", "0"]
       ],
       "layout": {
         "line-cap": "butt",
@@ -951,6 +1035,30 @@
       },
       "paint": {
         "line-color": "#e9ac77",
+        "line-opacity": 1,
+        "line-width": {"base": 1.2, "stops": [[8, 1.5], [20, 17]]}
+      }
+    },
+    {
+      "id": "highway-secondary-tertiary-casing-fiber",
+      "type": "line",
+      "metadata": {"mapbox:group": "1444849345966.4436"},
+      "source": "openmaptiles",
+      "source-layer": "transportation",
+      "filter": [
+        "all",
+        ["!in", "brunnel", "bridge", "tunnel"],
+        ["in", "class", "secondary", "tertiary"],
+        ["!=", "ramp", 1],
+        ["==", "broadband:fiber", "1"]
+      ],
+      "layout": {
+        "line-cap": "butt",
+        "line-join": "round",
+        "visibility": "visible"
+      },
+      "paint": {
+        "line-color": "#00ff00",
         "line-opacity": 1,
         "line-width": {"base": 1.2, "stops": [[8, 1.5], [20, 17]]}
       }
