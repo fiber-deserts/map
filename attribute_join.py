@@ -26,6 +26,7 @@ class JoinHandler(osmium.SimpleHandler):
     def __init__(self):
         super().__init__()
         self.count = 0
+        self.first = True
 
     def join(self, o, node=False):
         if self.count % 1_000_000 == 0:
@@ -39,7 +40,7 @@ class JoinHandler(osmium.SimpleHandler):
         #     return o
         # return o
 
-        if self.count < 25_000_000 or not o.tags:
+        if not o.tags:
             return o
 
         if node:
@@ -48,8 +49,13 @@ class JoinHandler(osmium.SimpleHandler):
             found = building_attributes[building_attributes["osm_way_id"] == o.id]
         if found.empty:
             found = way_attributes[way_attributes["osm_id"] == o.id]
+
         if found.empty:
             return o
+
+        if self.first:
+            print("first", self.count)
+            self.first = False
 
         # if len(found) > 1:
         #     print(found)

@@ -1,5 +1,6 @@
 import geopandas
 import pandas
+import numpy as np
 
 fastest = pandas.read_csv("fastest-by-block.csv")
 fastest.rename(
@@ -11,7 +12,7 @@ fastest.rename(
         "broadband:fiber": "BB-FIBER",
         "broadband:total": "BB-TOTAL",
         "broadband:ftth": "BB-FTTH",
-        "broadband:fiber-provider": "BB-F-PROV"
+        "broadband:fiber-provider": "BB-F-PROV",
     },
     inplace=True,
 )
@@ -25,9 +26,14 @@ print(fastest)
 print(fastest.dtypes)
 wa = shapes[53]
 wa["BLOCKID10"] = wa["BLOCKID10"].astype("int64")
+wa["density"] = (wa["POP10"] / wa["geometry"].area)
+wa["density"] = np.log2(wa["density"].astype("int64"))
+wa["density"].replace(-np.inf, 0, inplace=True)
+wa["density"] = wa["density"].astype("int64")
 print(wa)
 
 wa = wa.merge(fastest, left_on="BLOCKID10", right_on="census_block")
-print(wa)
+del wa["census_block"]
+# print(wa)
 print(wa.dtypes)
 wa.to_file("washington_census.shp")
