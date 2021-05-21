@@ -1,0 +1,41 @@
+{
+  "layers": {
+    "census_blocks": {
+      "minzoom": 4,
+      "maxzoom": 12,
+      "simplify_below": 13,
+      "simplify_level": 0.0005
+    },
+    "53": {
+      "minzoom": 4,
+      "maxzoom": 12,
+      "source": "data/census_block_shapes/tabblock2010_53_pophu.shp",
+      "source_columns": true,
+      "simplify_below": 12,
+      "simplify_ratio": 1.6,
+      "simplify_level": 0.0005,
+      "write_to": "census_blocks"
+    }
+  },
+  "settings": {
+    "minzoom": 4,
+    "maxzoom": 12,
+    "basezoom": 12,
+    "include_ids": true,
+	"combine_below": 14,
+    "name": "Tilemaker to OpenMapTiles schema",
+    "version": "3.0",
+	"bounding_box": [ -124.848974,24.396308,-66.885444,49.384358 ],
+    "description": "Tile config based on OpenMapTiles schema",
+    "compress": "gzip",
+    "filemetadata": {
+      "tilejson": "2.0.0",
+      "scheme": "xyz",
+      "type": "baselayer",
+      "format": "pbf",
+      "tiles": [
+        "https://fiber-deserts.net/tiles/{z}/{x}/{y}.pbf"
+      ]
+    }
+  }
+}
