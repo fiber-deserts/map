@@ -36,9 +36,9 @@ node_keys = {}
 -- function way_function(way)
 -- end
 
--- function attribute_function(attr, layer)
--- 	return {}
--- end
+function attribute_function(attr, layer)
+	return attr
+end
 
 -- ==========================================================
 -- Common functions
