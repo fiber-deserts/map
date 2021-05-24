@@ -25,6 +25,14 @@
     "openmaptiles": {
       "type": "vector",
       "url": "/static/spec.json"
+    },
+    "census": {
+      "type": "vector",
+      "tiles": [
+          "http://127.0.0.1:8001/-/vector-tiles/us-census/{z}/{x}/{y}.mvt"
+      ],
+      "minzoom": 0,
+      "maxzoom": 14
     }
   },
   "sprite": "https://openmaptiles.github.io/osm-bright-gl-style/sprite",
@@ -168,7 +176,7 @@
     {
       "id": "census-block-empty",
       "type": "fill",
-      "source": "openmaptiles",
+      "source": "census",
       "source-layer": "census_blocks",
       "filter": ["==", "POP10", 0],
       "paint": {
@@ -176,31 +184,30 @@
         "fill-opacity": ["case",
            ["boolean", ["feature-state", "hover"], false],
            0.2,
-           0]
+           0.6]
       }
     },
     {
       "id": "census-block-fiber",
       "type": "fill",
-      "source": "openmaptiles",
+      "source": "census",
       "source-layer": "census_blocks",
       "filter": [
         "all",
-        [">", "POP10", 0],
-        ["==", "BB-FTTH", 1]
+        [">", "POP10", 0]
       ],
       "paint": {
         "fill-color": "#00ff00",
         "fill-opacity": ["case",
            ["boolean", ["feature-state", "hover"], false],
            0.2,
-           0]
+           0.6]
       }
     },
     {
       "id": "census-block-no-fiber",
       "type": "fill",
-      "source": "openmaptiles",
+      "source": "census",
       "source-layer": "census_blocks",
       "filter": [
         "all",

@@ -8,7 +8,7 @@ print("  command = ../tilemaker/tilemaker --input $in --output $out --config con
 print("  pool = mem_heavy")
 print()
 print("rule tile-join")
-print("  command = tile-join -o $out $in")
+print("  command = tile-join --force -o $out $in")
 print("  pool = mem_heavy")
 print()
 print("rule dissolve-census-blocks")
