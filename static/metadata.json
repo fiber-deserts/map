@@ -1,0 +1,348 @@
+{
+  "tilejson": "2.0.0",
+  "scheme": "xyz",
+  "type": "baselayer",
+  "format": "pbf",
+  "tiles": [
+    "https://127.0.0.1:8001/-/tiles/{z}/{x}/{y}.pbf"
+  ],
+  "bounds": [
+    -126.7423,
+    45.54326,
+    -116.9145,
+    49.00708
+  ],
+  "name": "Tilemaker to OpenMapTiles schema",
+  "version": "3.0",
+  "description": "Tile config based on OpenMapTiles schema",
+  "minzoom": 0,
+  "maxzoom": 14,
+  "vector_layers": [
+    {
+      "id": "place",
+      "fields": {
+        "class": "String",
+        "name:latin": "String"
+      },
+      "minzoom": 0,
+      "maxzoom": 14
+    },
+    {
+      "id": "boundary",
+      "fields": {
+        "admin_level": "Number"
+      },
+      "minzoom": 0,
+      "maxzoom": 14
+    },
+    {
+      "id": "poi",
+      "fields": {
+        "class": "String",
+        "name:latin": "String",
+        "rank": "Number",
+        "subclass": "String"
+      },
+      "minzoom": 12,
+      "maxzoom": 14
+    },
+    {
+      "id": "poi_detail",
+      "fields": {
+        "class": "String",
+        "name:latin": "String",
+        "rank": "Number",
+        "subclass": "String"
+      },
+      "minzoom": 14,
+      "maxzoom": 14
+    },
+    {
+      "id": "housenumber",
+      "fields": {
+        "housenumber": "String"
+      },
+      "minzoom": 14,
+      "maxzoom": 14
+    },
+    {
+      "id": "waterway",
+      "fields": {
+        "brunnel": "String",
+        "class": "String",
+        "intermittent": "Number",
+        "name:latin": "String"
+      },
+      "minzoom": 8,
+      "maxzoom": 14
+    },
+    {
+      "id": "waterway_detail",
+      "fields": {
+        "brunnel": "String",
+        "class": "String",
+        "intermittent": "Number",
+        "name:latin": "String"
+      },
+      "minzoom": 12,
+      "maxzoom": 14
+    },
+    {
+      "id": "transportation",
+      "fields": {
+        "broadband:best-dba": "String",
+        "broadband:best-tech": "String",
+        "broadband:block-count": "String",
+        "broadband:fiber": "String",
+        "broadband:fiber-provider": "String",
+        "broadband:fiber-to-the-home": "String",
+        "brunnel": "String",
+        "class": "String",
+        "oneway": "Number",
+        "service": "String"
+      },
+      "minzoom": 4,
+      "maxzoom": 14
+    },
+    {
+      "id": "transportation_main",
+      "fields": {
+        "broadband:best-dba": "String",
+        "broadband:best-tech": "String",
+        "broadband:block-count": "String",
+        "broadband:fiber": "String",
+        "broadband:fiber-provider": "String",
+        "broadband:fiber-to-the-home": "String",
+        "brunnel": "String",
+        "class": "String",
+        "oneway": "Number",
+        "ramp": "Number"
+      },
+      "minzoom": 9,
+      "maxzoom": 14
+    },
+    {
+      "id": "transportation_mid",
+      "fields": {
+        "broadband:best-dba": "String",
+        "broadband:best-tech": "String",
+        "broadband:block-count": "String",
+        "broadband:fiber": "String",
+        "broadband:fiber-provider": "String",
+        "broadband:fiber-to-the-home": "String",
+        "brunnel": "String",
+        "class": "String",
+        "oneway": "Number",
+        "ramp": "Number"
+      },
+      "minzoom": 11,
+      "maxzoom": 14
+    },
+    {
+      "id": "transportation_detail",
+      "fields": {
+        "broadband:best-dba": "String",
+        "broadband:best-tech": "String",
+        "broadband:block-count": "String",
+        "broadband:fiber": "String",
+        "broadband:fiber-provider": "String",
+        "broadband:fiber-to-the-home": "String",
+        "brunnel": "String",
+        "class": "String",
+        "oneway": "Number",
+        "service": "String"
+      },
+      "minzoom": 13,
+      "maxzoom": 14
+    },
+    {
+      "id": "transportation_name",
+      "fields": {
+        "class": "String",
+        "name:latin": "String"
+      },
+      "minzoom": 8,
+      "maxzoom": 14
+    },
+    {
+      "id": "transportation_name_mid",
+      "fields": {
+        "class": "String",
+        "name:latin": "String",
+        "network": "String",
+        "ref": "String",
+        "ref_length": "Number"
+      },
+      "minzoom": 12,
+      "maxzoom": 14
+    },
+    {
+      "id": "transportation_name_detail",
+      "fields": {
+        "class": "String",
+        "name:latin": "String",
+        "network": "String",
+        "ref": "String",
+        "ref_length": "Number",
+        "subclass": "String"
+      },
+      "minzoom": 14,
+      "maxzoom": 14
+    },
+    {
+      "id": "building",
+      "fields": {
+        "broadband:best-dba": "String",
+        "broadband:best-tech": "String",
+        "broadband:block-count": "String",
+        "broadband:fiber": "String",
+        "broadband:fiber-provider": "String",
+        "broadband:fiber-to-the-home": "String"
+      },
+      "minzoom": 13,
+      "maxzoom": 14
+    },
+    {
+      "id": "water",
+      "fields": {
+        "class": "String",
+        "intermittent": "String"
+      },
+      "minzoom": 6,
+      "maxzoom": 14
+    },
+    {
+      "id": "ocean",
+      "fields": {
+        "class": "String"
+      },
+      "minzoom": 0,
+      "maxzoom": 14
+    },
+    {
+      "id": "water_name",
+      "fields": {
+        "class": "String",
+        "name:latin": "String"
+      },
+      "minzoom": 14,
+      "maxzoom": 14
+    },
+    {
+      "id": "water_name_detail",
+      "fields": {
+        "class": "String",
+        "name:latin": "String"
+      },
+      "minzoom": 14,
+      "maxzoom": 14
+    },
+    {
+      "id": "aeroway",
+      "fields": {
+        "class": "String",
+        "ref": "String"
+      },
+      "minzoom": 11,
+      "maxzoom": 14
+    },
+    {
+      "id": "aerodrome_label",
+      "fields": {
+        "class": "String",
+        "ele": "Number",
+        "ele_ft": "Number",
+        "iata": "String",
+        "icao": "String",
+        "name:latin": "String"
+      },
+      "minzoom": 10,
+      "maxzoom": 14
+    },
+    {
+      "id": "park",
+      "fields": {
+        "class": "String",
+        "name:latin": "String"
+      },
+      "minzoom": 11,
+      "maxzoom": 14
+    },
+    {
+      "id": "landuse",
+      "fields": {
+        "class": "String",
+        "name:latin": "String",
+        "rank": "Number",
+        "subclass": "String"
+      },
+      "minzoom": 4,
+      "maxzoom": 14
+    },
+    {
+      "id": "urban_areas",
+      "fields": {},
+      "minzoom": 4,
+      "maxzoom": 8
+    },
+    {
+      "id": "landcover",
+      "fields": {
+        "class": "String",
+        "name:latin": "String",
+        "rank": "Number",
+        "subclass": "String"
+      },
+      "minzoom": 0,
+      "maxzoom": 14
+    },
+    {
+      "id": "ice_shelf",
+      "fields": {},
+      "minzoom": 0,
+      "maxzoom": 9
+    },
+    {
+      "id": "glacier",
+      "fields": {},
+      "minzoom": 2,
+      "maxzoom": 9
+    },
+    {
+      "id": "mountain_peak",
+      "fields": {
+        "class": "String",
+        "ele": "Number",
+        "ele_ft": "Number",
+        "name:latin": "String",
+        "rank": "Number"
+      },
+      "minzoom": 11,
+      "maxzoom": 14
+    },
+    {
+      "id": "census_blocks",
+      "fields": {
+        "BB-DBA": "String",
+        "BB-DOWN": "Number",
+        "BB-F-PROV": "String",
+        "BB-FIBER": "Number",
+        "BB-FTTH": "Number",
+        "BB-TECH": "String",
+        "BB-TOTAL": "Number",
+        "BB-UP": "Number",
+        "BLOCKCE": "String",
+        "BLOCKID10": "Number",
+        "COUNTYFP10": "String",
+        "HOUSING10": "Number",
+        "PARTFLG": "String",
+        "POP10": "Number",
+        "STATEFP10": "String",
+        "TRACTCE10": "String",
+        "density": "Number"
+      },
+      "minzoom": 5,
+      "maxzoom": 14
+    }
+  ]
+}

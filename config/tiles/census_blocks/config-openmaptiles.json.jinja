@@ -1,0 +1,71 @@
+{
+  "layers": {
+    "census_blocks": {
+      "minzoom": 0,
+      "maxzoom": 14,
+      "simplify_below": 13,
+      "simplify_level": 0.0005
+    },
+    "{{ state_code }}-state": {
+      "minzoom": 0,
+      "maxzoom": 0,
+      "source": "gen/census_blocks/{{ state_code }}-state.shp",
+      "source_columns": true,
+      "simplify_below": 12,
+      "simplify_ratio": 1.6,
+      "simplify_level": 0.0005,
+      "write_to": "census_blocks"
+    },
+    "{{ state_code }}-counties": {
+      "minzoom": 1,
+      "maxzoom": 6,
+      "source": "gen/census_blocks/{{ state_code }}-counties.shp",
+      "source_columns": true,
+      "simplify_below": 12,
+      "simplify_ratio": 1.6,
+      "simplify_level": 0.0005,
+      "write_to": "census_blocks"
+    },
+    "{{ state_code }}-tracts": {
+      "minzoom": 7,
+      "maxzoom": 10,
+      "source": "gen/census_blocks/{{ state_code }}-tracts.shp",
+      "source_columns": true,
+      "simplify_below": 12,
+      "simplify_ratio": 1.4,
+      "simplify_level": 0.0005,
+      "write_to": "census_blocks"
+    },
+    "{{ state_code }}-blocks": {
+      "minzoom": 11,
+      "maxzoom": 14,
+      "source": "gen/census_blocks/{{ state_code }}-blocks.shp",
+      "source_columns": true,
+      "simplify_below": 12,
+      "simplify_ratio": 1.6,
+      "simplify_level": 0.0005,
+      "write_to": "census_blocks"
+    }
+  },
+  "settings": {
+    "minzoom": 0,
+    "maxzoom": 14,
+    "basezoom": 14,
+    "include_ids": true,
+	"combine_below": 1,
+    "name": "Tilemaker to OpenMapTiles schema",
+    "version": "3.0",
+	"bounding_box": [ -124.848974,24.396308,-66.885444,49.384358 ],
+    "description": "Tile config based on OpenMapTiles schema",
+    "compress": "gzip",
+    "filemetadata": {
+      "tilejson": "2.0.0",
+      "scheme": "xyz",
+      "type": "baselayer",
+      "format": "pbf",
+      "tiles": [
+        "https://fiber-deserts.net/tiles/{z}/{x}/{y}.pbf"
+      ]
+    }
+  }
+}
