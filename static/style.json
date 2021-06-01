@@ -26,12 +26,28 @@
       "type": "vector",
       "url": "/static/spec.json"
     },
-    "census": {
+    "census-states": {
       "type": "vector",
-      "tiles": [
-          "http://127.0.0.1:8001/-/vector-tiles/us-census/{z}/{x}/{y}.mvt"
-      ],
+      "url": "http://127.0.0.1:8001/-/gpkg/us-census/us-states_states/spec.json",
       "minzoom": 0,
+      "maxzoom": 0
+    },
+    "census-counties": {
+      "type": "vector",
+      "url": "http://127.0.0.1:8001/-/gpkg/us-census/us-counties_counties/spec.json",
+      "minzoom": 1,
+      "maxzoom": 6
+    },
+    "census-tracts": {
+      "type": "vector",
+      "url": "http://127.0.0.1:8001/-/gpkg/us-census/us-tracts_tracts/spec.json",
+      "minzoom": 7,
+      "maxzoom": 10
+    },
+    "census-blocks": {
+      "type": "vector",
+      "url": "http://127.0.0.1:8001/-/gpkg/us-census/us-blocks_blocks/spec.json",
+      "minzoom": 11,
       "maxzoom": 14
     }
   },
@@ -176,7 +192,7 @@
     {
       "id": "census-block-empty",
       "type": "fill",
-      "source": "census",
+      "source": "census-blocks",
       "source-layer": "census_blocks",
       "filter": ["==", "POP10", 0],
       "paint": {
@@ -188,9 +204,35 @@
       }
     },
     {
+      "id": "states",
+      "type": "fill",
+      "source": "census-states",
+      "source-layer": "us-states_states",
+      "paint": {
+        "fill-color": "#00ff00",
+        "fill-opacity": ["case",
+           ["boolean", ["feature-state", "hover"], false],
+           0.2,
+           0.6]
+      }
+    },
+    {
+      "id": "counties",
+      "type": "fill",
+      "source": "census-counties",
+      "source-layer": "us-counties_counties",
+      "paint": {
+        "fill-color": "#00ff00",
+        "fill-opacity": ["case",
+           ["boolean", ["feature-state", "hover"], false],
+           0.2,
+           0.6]
+      }
+    },
+    {
       "id": "census-block-fiber",
       "type": "fill",
-      "source": "census",
+      "source": "census-blocks",
       "source-layer": "census_blocks",
       "filter": [
         "all",
@@ -207,7 +249,7 @@
     {
       "id": "census-block-no-fiber",
       "type": "fill",
-      "source": "census",
+      "source": "census-blocks",
       "source-layer": "census_blocks",
       "filter": [
         "all",

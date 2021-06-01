@@ -6,6 +6,8 @@
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
     <script src='https://unpkg.com/maplibre-gl@1.14.0/dist/maplibre-gl.js'></script>
     <link href='https://unpkg.com/maplibre-gl@1.14.0/dist/maplibre-gl.css' rel='stylesheet' />
+	<script src='http://mapbox-gl-inspect.lukasmartinelli.ch/dist/mapbox-gl-inspect.min.js'></script>
+	<link href='http://mapbox-gl-inspect.lukasmartinelli.ch/dist/mapbox-gl-inspect.css' rel='stylesheet' />
     <style>
         body { margin:0; padding:0; }
         #map { position:absolute; top:0; bottom:0; width:100%; }
@@ -39,94 +41,104 @@ fetch("/static/metadata.json")
 
 		// -- Comment the following lines out to remove debug UI --
 		map.showTileBoundaries=true;
+		map.addControl(new MapboxInspect({
+		  showInspectButton: false,
+		  showMapPopup: true,
+		  showMapPopupOnHover: false,
+		  showInspectMapPopupOnHover: false,
+		  popup: new maplibregl.Popup({
+		    closeButton: true,
+		    closeOnClick: false
+		  })
+		}));
 		// -- --
 
-        // When the user moves their mouse over the state-fill layer, we'll update the
-// feature state for the feature under the mouse.
-var hoveredStateId = null;
-map.on('mousemove', 'census-block-empty', function (e) {
-if (e.features.length > 0) {
-if (hoveredStateId !== null) {
-map.setFeatureState(
-{ source: 'census', sourceLayer: "census_blocks", id: hoveredStateId },
-{ hover: false }
-);
-}
-hoveredStateId = e.features[0].id;
-map.setFeatureState(
-{ source: 'census', sourceLayer: "census_blocks", id: hoveredStateId },
-{ hover: true }
-);
-}
-});
+//         // When the user moves their mouse over the state-fill layer, we'll update the
+// // feature state for the feature under the mouse.
+// var hoveredStateId = null;
+// map.on('mousemove', 'census-block-empty', function (e) {
+// if (e.features.length > 0) {
+// if (hoveredStateId !== null) {
+// map.setFeatureState(
+// { source: 'census', sourceLayer: "census_blocks", id: hoveredStateId },
+// { hover: false }
+// );
+// }
+// hoveredStateId = e.features[0].id;
+// map.setFeatureState(
+// { source: 'census', sourceLayer: "census_blocks", id: hoveredStateId },
+// { hover: true }
+// );
+// }
+// });
  
-// When the mouse leaves the state-fill layer, update the feature state of the
-// previously hovered feature.
-map.on('mouseleave', 'census-block-empty', function () {
-if (hoveredStateId !== null) {
-map.setFeatureState(
-{ source: 'census', sourceLayer: "census_blocks", id: hoveredStateId },
-{ hover: false }
-);
-}
-hoveredStateId = null;
-});
+// // When the mouse leaves the state-fill layer, update the feature state of the
+// // previously hovered feature.
+// map.on('mouseleave', 'census-block-empty', function () {
+// if (hoveredStateId !== null) {
+// map.setFeatureState(
+// { source: 'census', sourceLayer: "census_blocks", id: hoveredStateId },
+// { hover: false }
+// );
+// }
+// hoveredStateId = null;
+// });
 
-map.on('mousemove', 'census-block-no-fiber', function (e) {
-if (e.features.length > 0) {
-if (hoveredStateId !== null) {
-map.setFeatureState(
-{ source: 'census', sourceLayer: "census_blocks", id: hoveredStateId },
-{ hover: false }
-);
-}
-hoveredStateId = e.features[0].id;
-map.setFeatureState(
-{ source: 'census', sourceLayer: "census_blocks", id: hoveredStateId },
-{ hover: true }
-);
-}
-});
+// map.on('mousemove', 'census-block-no-fiber', function (e) {
+// if (e.features.length > 0) {
+// if (hoveredStateId !== null) {
+// map.setFeatureState(
+// { source: 'census', sourceLayer: "census_blocks", id: hoveredStateId },
+// { hover: false }
+// );
+// }
+// hoveredStateId = e.features[0].id;
+// map.setFeatureState(
+// { source: 'census', sourceLayer: "census_blocks", id: hoveredStateId },
+// { hover: true }
+// );
+// }
+// });
  
-// When the mouse leaves the state-fill layer, update the feature state of the
-// previously hovered feature.
-map.on('mouseleave', 'census-block-no-fiber', function () {
-if (hoveredStateId !== null) {
-map.setFeatureState(
-{ source: 'census', sourceLayer: "census_blocks", id: hoveredStateId },
-{ hover: false }
-);
-}
-hoveredStateId = null;
-});
+// // When the mouse leaves the state-fill layer, update the feature state of the
+// // previously hovered feature.
+// map.on('mouseleave', 'census-block-no-fiber', function () {
+// if (hoveredStateId !== null) {
+// map.setFeatureState(
+// { source: 'census', sourceLayer: "census_blocks", id: hoveredStateId },
+// { hover: false }
+// );
+// }
+// hoveredStateId = null;
+// });
 
-map.on('mousemove', 'census-block-fiber', function (e) {
-if (e.features.length > 0) {
-if (hoveredStateId !== null) {
-map.setFeatureState(
-{ source: 'census', sourceLayer: "census_blocks", id: hoveredStateId },
-{ hover: false }
-);
-}
-hoveredStateId = e.features[0].id;
-map.setFeatureState(
-{ source: 'census', sourceLayer: "census_blocks", id: hoveredStateId },
-{ hover: true }
-);
-}
-});
+// map.on('mousemove', 'census-block-fiber', function (e) {
+// if (e.features.length > 0) {
+// if (hoveredStateId !== null) {
+// map.setFeatureState(
+// { source: 'census', sourceLayer: "census_blocks", id: hoveredStateId },
+// { hover: false }
+// );
+// }
+// hoveredStateId = e.features[0].id;
+// map.setFeatureState(
+// { source: 'census', sourceLayer: "census_blocks", id: hoveredStateId },
+// { hover: true }
+// );
+// }
+// });
  
-// When the mouse leaves the state-fill layer, update the feature state of the
-// previously hovered feature.
-map.on('mouseleave', 'census-block-fiber', function () {
-if (hoveredStateId !== null) {
-map.setFeatureState(
-{ source: 'census', sourceLayer: "census_blocks", id: hoveredStateId },
-{ hover: false }
-);
-}
-hoveredStateId = null;
-});
+// // When the mouse leaves the state-fill layer, update the feature state of the
+// // previously hovered feature.
+// map.on('mouseleave', 'census-block-fiber', function () {
+// if (hoveredStateId !== null) {
+// map.setFeatureState(
+// { source: 'census', sourceLayer: "census_blocks", id: hoveredStateId },
+// { hover: false }
+// );
+// }
+// hoveredStateId = null;
+// });
 	}
 )
 </script>

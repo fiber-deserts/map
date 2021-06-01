@@ -15,12 +15,12 @@ print("rule dissolve-census-blocks")
 print("  command = python cb-zoom-split.py $in")
 print("  pool = mem_heavy")
 print()
-print("rule census-tiles")
-print("  command = ../tilemaker/tilemaker --output $out --config $in --process config/tiles/census_blocks/process-openmaptiles.lua")
-print("  pool = mem_heavy")
+print("rule gpkg-join-single-layer")
+print("  command = rm -f $out && ogrmerge.py -single -f GPKG -nln $layer_name -o $out $in")
 print()
-print("rule gen-census-config")
-print("  command = jinja -D state_code $state_code $in > $out")
+print("rule gpkg-join-layers")
+print("  command = rm -f $out && ogrmerge.py -f GPKG -o $out $in")
+#print("  pool = mem_heavy")
 print()
 
 osm_root = pathlib.Path("data/osm/")
@@ -40,22 +40,32 @@ print(f"build gen/basemap/us-basemap.mbtiles: tile-join {all_basemap}")
 print()
 
 census_block_root = pathlib.Path("data/census_block_shapes")
-all_census_tiles = []
+all_census_gpkg = {"states": [],
+                   "counties": [],
+                   "tracts": [],
+                   "blocks": []}
 for p in census_block_root.glob("*pophu.shp"):
     state_code = p.name.rsplit("_")[1]
-    out = f"gen/census_blocks/{state_code}-blocks.shp gen/census_blocks/{state_code}-tracts.shp gen/census_blocks/{state_code}-counties.shp gen/census_blocks/{state_code}-state.shp"
+    out = []
+    for tier in all_census_gpkg:
+        fn = f"gen/census_blocks/{state_code}-{tier}.gpkg"
+        all_census_gpkg[tier].append(fn)
+        out.append(fn)
+    out = " ".join(out)
     print(f"build {out}: dissolve-census-blocks {p}")
-    census_config = f"gen/census_blocks/{state_code}-config.json"
-    print(f"build {census_config}: gen-census-config config/tiles/census_blocks/config-openmaptiles.json.jinja")
-    print(f"  state_code = {state_code}")
-    tile_out = f"gen/census_blocks/{state_code}.mbtiles"
-    all_census_tiles.append(tile_out)
-    print(f"build {tile_out}: census-tiles {census_config}")
-    print()
 
-all_census_tiles = " ".join(all_census_tiles)
-print(f"build gen/census_blocks/us-census.mbtiles: tile-join {all_census_tiles}")
 print()
 
-print("build census: phony gen/census_blocks/us-census.mbtiles")
+tier_fns = []
+for tier in all_census_gpkg:
+    fn = f"gen/census_blocks/us-{tier}.gpkg"
+    tier_fns.append(fn)
+    inputs = " ".join(all_census_gpkg[tier])
+    print(f"build {fn}: gpkg-join-single-layer {inputs}")
+    print(f"  layer_name = {tier}")
+    print()
+tier_fns = " ".join(tier_fns)
+print(f"build gen/census_blocks/us-census.gpkg: gpkg-join-layers {tier_fns}")
+
+print("build census: phony gen/census_blocks/us-census.gpkg")
 print("build basemap: phony gen/basemap/us-basemap.mbtiles")
