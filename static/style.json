@@ -208,6 +208,7 @@
       "type": "fill",
       "source": "census-states",
       "source-layer": "us-states_states",
+      "maxzoom": 1,
       "paint": {
         "fill-color": "#00ff00",
         "fill-opacity": ["case",
@@ -225,8 +226,8 @@
         "fill-color": "#00ff00",
         "fill-opacity": ["case",
            ["boolean", ["feature-state", "hover"], false],
-           0.2,
-           0.6]
+           0.8,
+           0.1]
       }
     },
     {
