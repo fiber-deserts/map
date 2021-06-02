@@ -22,6 +22,12 @@ print("rule gpkg-join-layers")
 print("  command = rm -f $out && ogrmerge.py -f GPKG -o $out $in")
 #print("  pool = mem_heavy")
 print()
+print("rule unzip")
+print("  command = unzip -d $$(dirname $out) $in")
+print()
+print("rule convert")
+print("  command = ogr2ogr $out $in")
+print()
 
 osm_root = pathlib.Path("data/osm/")
 basemap_root = pathlib.Path("gen/basemap")
@@ -69,3 +75,20 @@ print(f"build gen/census_blocks/us-census.gpkg: gpkg-join-layers {tier_fns}")
 
 print("build census: phony gen/census_blocks/us-census.gpkg")
 print("build basemap: phony gen/basemap/us-basemap.mbtiles")
+
+
+building_root = pathlib.Path("data/microsoft_buildings")
+out = []
+for p in building_root.glob("*geojson.zip"):
+    parts = p.name.split(".")
+    unzipped = "gen/buildings/" + ".".join(parts[:2])
+    print(f"build {unzipped}: unzip {p}")
+    geopackage = "gen/buildings/" + ".".join((parts[0], "gpkg"))
+    print(f"build {geopackage}: convert {unzipped}")
+    out.append(geopackage)
+
+out = " ".join(out)
+print(f"build gen/buildings/us-buildings.gpkg: gpkg-join-single-layer {out}")
+print(f"  layer_name = buildings")
+
+print("build buildings: phony gen/buildings/us-buildings.gpkg")

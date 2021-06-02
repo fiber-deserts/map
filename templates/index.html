@@ -55,90 +55,62 @@ fetch("/static/metadata.json")
 
 //         // When the user moves their mouse over the state-fill layer, we'll update the
 // // feature state for the feature under the mouse.
-var hoveredStateId = null;
-map.on('mousemove', 'counties', function (e) {
-if (e.features.length > 0) {
-if (hoveredStateId !== null) {
-map.setFeatureState(
-{ source: 'census-counties', sourceLayer: "us-counties_counties", id: hoveredStateId },
-{ hover: false }
-);
-}
-hoveredStateId = e.features[0].id;
-map.setFeatureState(
-{ source: 'census-counties', sourceLayer: "us-counties_counties", id: hoveredStateId },
-{ hover: true }
-);
-}
- });
- 
-// When the mouse leaves the state-fill layer, update the feature state of the
-// previously hovered feature.
-map.on('mouseleave', 'counties', function () {
-if (hoveredStateId !== null) {
-map.setFeatureState(
-{ source: 'census-counties', sourceLayer: "us-counties_counties", id: hoveredStateId },
-{ hover: false }
-);
-}
-hoveredStateId = null;
-});
+	var tiers = ["states", "counties", "tracts", "blocks"];
+	let maxZoom = {"states": 1, "counties": 7, "tracts": 11, "blocks": 20};
+	var hoveredStateId = {};
 
-// map.on('mousemove', 'census-block-no-fiber', function (e) {
-// if (e.features.length > 0) {
-// if (hoveredStateId !== null) {
-// map.setFeatureState(
-// { source: 'census', sourceLayer: "census_blocks", id: hoveredStateId },
-// { hover: false }
-// );
-// }
-// hoveredStateId = e.features[0].id;
-// map.setFeatureState(
-// { source: 'census', sourceLayer: "census_blocks", id: hoveredStateId },
-// { hover: true }
-// );
-// }
-// });
- 
-// // When the mouse leaves the state-fill layer, update the feature state of the
-// // previously hovered feature.
-// map.on('mouseleave', 'census-block-no-fiber', function () {
-// if (hoveredStateId !== null) {
-// map.setFeatureState(
-// { source: 'census', sourceLayer: "census_blocks", id: hoveredStateId },
-// { hover: false }
-// );
-// }
-// hoveredStateId = null;
-// });
+	map.once("styledata", function (e) {
+		for (let tier of tiers) {
+			hoveredStateId[tier] = null;
+			let layerDef =     {
+		      "id": tier,
+		      "type": "fill",
+		      "source": "census-" + tier,
+		      "source-layer": "us-" + tier + "_" + tier,
+		      "maxzoom": maxZoom[tier],
+		      "paint": {
+		        "fill-color": "#00ff00",
+		        "fill-opacity": ["case",
+		           ["boolean", ["feature-state", "hover"], false],
+		           0.8,
+		           0.1]
+		      }
+		    };
+			map.addLayer(layerDef, "waterway_tunnel");
 
-// map.on('mousemove', 'census-block-fiber', function (e) {
-// if (e.features.length > 0) {
-// if (hoveredStateId !== null) {
-// map.setFeatureState(
-// { source: 'census', sourceLayer: "census_blocks", id: hoveredStateId },
-// { hover: false }
-// );
-// }
-// hoveredStateId = e.features[0].id;
-// map.setFeatureState(
-// { source: 'census', sourceLayer: "census_blocks", id: hoveredStateId },
-// { hover: true }
-// );
-// }
-// });
- 
-// // When the mouse leaves the state-fill layer, update the feature state of the
-// // previously hovered feature.
-// map.on('mouseleave', 'census-block-fiber', function () {
-// if (hoveredStateId !== null) {
-// map.setFeatureState(
-// { source: 'census', sourceLayer: "census_blocks", id: hoveredStateId },
-// { hover: false }
-// );
-// }
-// hoveredStateId = null;
-// });
+
+			map.on('mousemove', tier, function (e) {
+				if (e.features.length == 0) {
+					return;
+				}
+				if (hoveredStateId[tier] !== null) {
+					map.setFeatureState(
+						{ source: 'census-' + tier, sourceLayer: "us-" + tier + "_" + tier, id: hoveredStateId[tier] },
+						{ hover: false }
+						);
+				}
+				hoveredStateId[tier] = e.features[0].id;
+				map.setFeatureState(
+					{ source: 'census-' + tier, sourceLayer: "us-" + tier + "_" + tier, id: hoveredStateId[tier] },
+					{ hover: true }
+				);
+			 });
+			 
+			// When the mouse leaves the state-fill layer, update the feature state of the
+			// previously hovered feature.
+			map.on('mouseleave', tier, function () {
+				if (hoveredStateId[tier] !== null) {
+					map.setFeatureState(
+						{ source: 'census-' + tier, sourceLayer: "us-" + tier + "_" + tier, id: hoveredStateId[tier] },
+						{ hover: false }
+					);
+					}
+				hoveredStateId[tier] = null;
+			});
+		}
+	});
+
+
 	}
 )
 </script>

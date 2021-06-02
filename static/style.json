@@ -26,6 +26,11 @@
       "type": "vector",
       "url": "/static/spec.json"
     },
+    "us-buildings": {
+      "type": "vector",
+      "url": "http://127.0.0.1:8001/-/gpkg/us-buildings/buildings/spec.json",
+      "minzoom": 13
+    },
     "census-states": {
       "type": "vector",
       "url": "http://127.0.0.1:8001/-/gpkg/us-census/us-states_states/spec.json",
@@ -201,33 +206,6 @@
            ["boolean", ["feature-state", "hover"], false],
            0.2,
            0.6]
-      }
-    },
-    {
-      "id": "states",
-      "type": "fill",
-      "source": "census-states",
-      "source-layer": "us-states_states",
-      "maxzoom": 1,
-      "paint": {
-        "fill-color": "#00ff00",
-        "fill-opacity": ["case",
-           ["boolean", ["feature-state", "hover"], false],
-           0.2,
-           0.6]
-      }
-    },
-    {
-      "id": "counties",
-      "type": "fill",
-      "source": "census-counties",
-      "source-layer": "us-counties_counties",
-      "paint": {
-        "fill-color": "#00ff00",
-        "fill-opacity": ["case",
-           ["boolean", ["feature-state", "hover"], false],
-           0.8,
-           0.1]
       }
     },
     {
@@ -473,8 +451,8 @@
       "id": "building",
       "type": "fill",
       "metadata": {"mapbox:group": "1444849364238.8171"},
-      "source": "openmaptiles",
-      "source-layer": "building",
+      "source": "us-buildings",
+      "source-layer": "buildings",
       "paint": {
         "fill-antialias": true,
         "fill-color": {"base": 1, "stops": [[15.5, "#f2eae2"], [16, "#dfdbd7"]]}
@@ -484,8 +462,8 @@
       "id": "building-top",
       "type": "fill",
       "metadata": {"mapbox:group": "1444849364238.8171"},
-      "source": "openmaptiles",
-      "source-layer": "building",
+      "source": "us-buildings",
+      "source-layer": "buildings",
       "filter": ["all", ["==", "broadband:fiber-to-the-home", "0"]],
       "layout": {"visibility": "visible"},
       "paint": {
@@ -499,8 +477,8 @@
       "id": "fiber-building-top",
       "type": "fill",
       "metadata": {"mapbox:group": "1444849364238.8171"},
-      "source": "openmaptiles",
-      "source-layer": "building",
+      "source": "us-buildings",
+      "source-layer": "buildings",
       "filter": ["all", ["==", "broadband:fiber-to-the-home", "1"]],
       "layout": {"visibility": "visible"},
       "paint": {
