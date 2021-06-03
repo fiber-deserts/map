@@ -6,20 +6,53 @@
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
     <script src='https://unpkg.com/maplibre-gl@1.14.0/dist/maplibre-gl.js'></script>
     <link href='https://unpkg.com/maplibre-gl@1.14.0/dist/maplibre-gl.css' rel='stylesheet' />
+    <script src="https://unpkg.com/split-grid/dist/split-grid.js"></script>
 	<script src='http://mapbox-gl-inspect.lukasmartinelli.ch/dist/mapbox-gl-inspect.min.js'></script>
 	<link href='http://mapbox-gl-inspect.lukasmartinelli.ch/dist/mapbox-gl-inspect.css' rel='stylesheet' />
     <style>
         body { margin:0; padding:0; }
-        #map { position:absolute; top:0; bottom:0; width:100%; }
+
 		#refresh { position: absolute; top: 15px; left: 15px; background-color: white; padding: 5px; 
 			border: 1px solid black; font-family: Avenir; cursor: pointer; }
+
+		.grid {
+		    display: grid;
+		    grid-template-columns: 1fr 10px 1fr;
+		    position:absolute; top:0; bottom:0; width:100%;
+		}
+
+		#map {
+			width: 100%;
+		}
+
+		.gutter-col {
+		    grid-row: 1/-1;
+		    cursor: col-resize;
+		}
+
+		.gutter-col-1 {
+		    grid-column: 1;
+		}
     </style>
 </head>
 <body>
-
-<div id='map'></div>
+<div class="grid">
+    <div class="gutter-col gutter-col-1">
+    </div>
+    <div>
+    	Hello
+    </div>
+    <div id='map'></div>
+</div>
 <!-- <div id='refresh' onclick='reload()'>Reload</div> -->
 <script>
+window.Split({
+    columnGutters: [{
+        track: 1,
+        element: document.querySelector('.gutter-col-1'),
+    }],
+})
+
 var map;
 
 fetch("/static/metadata.json")
