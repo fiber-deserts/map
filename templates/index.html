@@ -8,6 +8,7 @@
     <link href='https://unpkg.com/maplibre-gl@1.14.0/dist/maplibre-gl.css' rel='stylesheet' />
     <script src="https://unpkg.com/split-grid/dist/split-grid.js"></script>
 	<script src='http://mapbox-gl-inspect.lukasmartinelli.ch/dist/mapbox-gl-inspect.min.js'></script>
+	<script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
 	<link href='http://mapbox-gl-inspect.lukasmartinelli.ch/dist/mapbox-gl-inspect.css' rel='stylesheet' />
     <style>
         body { margin:0; padding:0; }
@@ -28,22 +29,43 @@
 		.gutter-col {
 		    grid-row: 1/-1;
 		    cursor: col-resize;
+		    background-color: rgb(229, 231, 235);
 		}
 
 		.gutter-col-1 {
-		    grid-column: 1;
+		    grid-column: 2;
 		}
     </style>
 </head>
 <body>
+{% raw %}
 <div class="grid">
-    <div class="gutter-col gutter-col-1">
-    </div>
     <div>
-    	Hello
-    </div>
+	    <h2>Form 477 Wireline</h2>
+	    <div id="f477">
+	    	<template id="f477-list">
+	    		{{#each entries}}
+	    		<div class="f477-entry">
+	    		{{ DBAName.label }} {{ TechCode }} {{ MaxAdDown}} / {{ MaxAdUp }}
+		    	</div>
+		    	{{/each}}
+	    	</template>
+	    </div>
+	    <h2>Form 477 Wireless</h2>
+	    <div id="f477-mobile">
+	    	<template id="f477-mobile-list">
+	    		{{#each entries}}
+	    		<div class="f477-mobile-entry">
+	    		{{ DBA.label }} Overall {{ANY}}% LTE {{83}}% CDMA {{85}}% GSM {{86}}% 5G {{89}}% Other {{0}}%
+		    	</div>
+		    	{{/each}}
+	    	</template>
+	    </div>
+	</div>
+    <div class="gutter-col gutter-col-1"></div>
     <div id='map'></div>
 </div>
+{% endraw %}
 <!-- <div id='refresh' onclick='reload()'>Reload</div> -->
 <script>
 window.Split({
@@ -54,6 +76,13 @@ window.Split({
 })
 
 var map;
+var currentMarker;
+
+var f477_template = document.getElementById('f477-list').innerHTML;
+var renderF477= Handlebars.compile(f477_template);
+
+var f477_mobile_template = document.getElementById('f477-mobile-list').innerHTML;
+var renderF477Mobile= Handlebars.compile(f477_mobile_template);
 
 fetch("/static/metadata.json")
 	.then(response => response.json())
@@ -74,16 +103,16 @@ fetch("/static/metadata.json")
 
 		// -- Comment the following lines out to remove debug UI --
 		map.showTileBoundaries=true;
-		map.addControl(new MapboxInspect({
-		  showInspectButton: false,
-		  showMapPopup: true,
-		  showMapPopupOnHover: false,
-		  showInspectMapPopupOnHover: false,
-		  popup: new maplibregl.Popup({
-		    closeButton: true,
-		    closeOnClick: false
-		  })
-		}));
+		// map.addControl(new MapboxInspect({
+		//   showInspectButton: false,
+		//   showMapPopup: true,
+		//   showMapPopupOnHover: false,
+		//   showInspectMapPopupOnHover: false,
+		//   popup: new maplibregl.Popup({
+		//     closeButton: true,
+		//     closeOnClick: false
+		//   })
+		// }));
 		// -- --
 
 //         // When the user moves their mouse over the state-fill layer, we'll update the
@@ -91,10 +120,12 @@ fetch("/static/metadata.json")
 	var tiers = ["states", "counties", "tracts", "blocks"];
 	let maxZoom = {"states": 1, "counties": 7, "tracts": 11, "blocks": 20};
 	var hoveredStateId = {};
+	var clickedStateId = {};
 
 	map.once("styledata", function (e) {
 		for (let tier of tiers) {
 			hoveredStateId[tier] = null;
+			clickedStateId[tier] = null;
 			let layerDef =     {
 		      "id": tier,
 		      "type": "fill",
@@ -109,8 +140,62 @@ fetch("/static/metadata.json")
 		           0.1]
 		      }
 		    };
-			map.addLayer(layerDef, "waterway_tunnel");
+			map.addLayer(layerDef, "waterway_tunnel"); // Layer below waterway_tunnel
+			let lineLayerDef =     {
+		      "id": tier + "_outline",
+		      "type": "line",
+		      "source": "census-" + tier,
+		      "source-layer": "us-" + tier + "_" + tier,
+		      "maxzoom": maxZoom[tier],
+		      "paint": {
+		        "line-color": "#3FB1CE",
+		        "line-width": ["case",
+		           ["boolean", ["feature-state", "selected"], false],
+		           2,
+		           0]
+		      }
+		    };
+			map.addLayer(lineLayerDef, "boundary-land-level-4"); // Layer below admin dashes
 
+			map.on('click', tier, function (e) {
+				console.log(tier, e.features[0].properties);
+				if (currentMarker) {
+					currentMarker.setLngLat(e.lngLat);
+				} else {
+					currentMarker = new maplibregl.Marker()
+						.setLngLat(e.lngLat)
+						.addTo(map);
+				}
+				if (clickedStateId[tier] !== null) {
+					map.setFeatureState(
+						{ source: 'census-' + tier, sourceLayer: "us-" + tier + "_" + tier, id: clickedStateId[tier] },
+						{ selected: false }
+						);
+				}
+				let id = e.features[0].id;
+				console.log(e.features[0].properties.BLOCKID10)
+				fetch(`/f477/fbd_us_with_satellite_jun2020_v1_fixed.json?BlockCode__exact=${e.features[0].properties.BLOCKID10}&_sort_desc=MaxAdUp&_labels=on&_shape=array`)
+					.then(response => response.json())
+					.then(data => {
+						console.log(data);
+						document.getElementById('f477').innerHTML = renderF477({
+  entries: data,
+});
+						});
+				fetch(`/f477-mobile/F477_2020_06_Actual_Area_Methodology_State_ALL_US.json?FIPS__exact=${e.features[0].properties.BLOCKID10}&_sort_desc=ANY&_labels=on&_shape=array`)
+					.then(response => response.json())
+					.then(data => {
+						console.log(data);
+						document.getElementById('f477-mobile').innerHTML = renderF477Mobile({
+  entries: data,
+});
+						});
+				clickedStateId[tier] = id;
+				map.setFeatureState(
+					{ source: 'census-' + tier, sourceLayer: "us-" + tier + "_" + tier, id: clickedStateId[tier] },
+					{ selected: true }
+					);
+			});
 
 			map.on('mousemove', tier, function (e) {
 				if (e.features.length == 0) {
